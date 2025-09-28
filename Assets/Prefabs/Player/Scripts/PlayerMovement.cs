@@ -1,4 +1,7 @@
 ﻿using UnityEngine;
+/// <summary>
+/// Permite el comportamiento de movimiento del jugador.
+/// </summary>
 
 
 public class PlayerMovement : MonoBehaviour
@@ -20,26 +23,29 @@ public class PlayerMovement : MonoBehaviour
     /// Indica la velociudad aplicada en el movimiento lateral del jugador.
     /// </summary>
     private float velocidadLateral;
+    /// <summary>
+    /// Representa la estrategia de movimiento lateral del jugador.
+    /// </summary>
+    private IMovementStrategy strategy;
 
     #endregion
 
-
-
+    #region Ciclo de vida del script
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        fuerzaPorAplicar = new Vector3(0, 0, 5f);
+        fuerzaPorAplicar = new Vector3(0, 0, 11f);
         tiempoDesdeUltimaFuerza = 0f;
         intervaloTiempo = 2f;
-        velocidadLateral = 2f;
+        velocidadLateral = 3f;
+        SetStrategy(new MovimientoAcelerado());
 
     }
 
 
     private void Update()
     {
-        float direccion = Input.GetAxis("Horizontal");
-        transform.Translate(direccion * velocidadLateral * Time.deltaTime, 0, 0);
+        strategy.Move(transform, velocidadLateral);
     }
 
 
@@ -54,4 +60,14 @@ public class PlayerMovement : MonoBehaviour
         }
 
     }
+
+
+    #endregion
+
+    #region Lógica del script
+    public void SetStrategy(IMovementStrategy strategy)
+    {
+        this.strategy = strategy;
+    }
+    #endregion
 }
