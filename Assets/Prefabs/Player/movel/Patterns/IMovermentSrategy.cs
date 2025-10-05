@@ -1,6 +1,8 @@
 using UnityEngine;
 
+
 public interface IMovementStrategy
 {
-    public void Move(Transform targe, float speed);
+   
+    void Move(Transform target, Rigidbody rb, float velocidadMax, float aceleracionNormal, float aceleracionExtra, float desaceleracion);
 }
