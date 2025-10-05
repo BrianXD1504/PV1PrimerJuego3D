@@ -1,18 +1,34 @@
 using UnityEngine;
+using System.Collections.Generic;
 
-// Estrategia de movimiento con aceleración horizontal
 public class MovimientoAcelerado : IMovementStrategy
 {
-    private float velocidadActual = 0f;    
-    private float aceleracion = 2f;        
-    
-    public void Move(Transform transform, float speed)
+    private float velocidadActual = 0f;
+    private List<ICommand> comandos = ComandosMovimiento.Direccion();
+    private ICommand boost = ComandosMovimiento.Boost();
+
+    public void Move(Transform target, Rigidbody rb, float velocidadMax, float aceleracionNormal, float aceleracionExtra, float desaceleracion)
     {
-       
-        velocidadActual += Input.GetAxis("Horizontal") * aceleracion;
+        float direccion = 0f;
+        foreach (var comando in comandos)
+        {
+            direccion += comando.Ejecutar();
+        }
 
-        velocidadActual = Mathf.Clamp(velocidadActual, -speed, speed);
+        float aceleracionActual = boost.Ejecutar() > 0f ? aceleracionExtra : aceleracionNormal;
 
-        transform.Translate(velocidadActual * Time.deltaTime,0,0);
+        if (direccion != 0)
+        {
+            velocidadActual += aceleracionActual * Time.fixedDeltaTime;
+            velocidadActual = Mathf.Clamp(velocidadActual, 0f, velocidadMax);
+        }
+        else
+        {
+            velocidadActual -= desaceleracion * Time.fixedDeltaTime;
+            velocidadActual = Mathf.Max(velocidadActual, 0f);
+        }
+
+        Vector3 movimiento = new Vector3(direccion * velocidadActual * Time.fixedDeltaTime, 0, 0);
+        rb.MovePosition(rb.position + movimiento);
     }
 }

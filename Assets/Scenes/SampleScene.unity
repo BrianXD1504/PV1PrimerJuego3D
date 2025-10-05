@@ -377,6 +377,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8b8ae6080969cb4ba7b00a0458c01a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fuerzaPorAplicar: {x: 0, y: 0, z: 11}
+  intervaloTiempo: 2
+  velocidadLateral: 3
+  velocidadMax: 15
+  aceleracionNormal: 20
+  aceleracionExtra: 40
+  desaceleracion: 30
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
